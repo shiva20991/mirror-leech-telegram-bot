@@ -6,7 +6,8 @@ from .download_helper import DownloadHelper
 from ..status_utils.telegram_download_status import TelegramDownloadStatus
 from bot.helper.telegram_helper.message_utils import sendMarkup, sendStatusMessage
 from bot.helper.mirror_utils.upload_utils.gdriveTools import GoogleDriveHelper
-
+AUTO_RE_REM = "WWW.1TAMILMV.BAR @TRVPN"
+AUTO_RE_ADD = "TAMIL"
 global_lock = threading.Lock()
 GLOBAL_GID = set()
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
@@ -94,9 +95,22 @@ class TelegramDownloadHelper(DownloadHelper):
                 download = media.file_id not in GLOBAL_GID
             if filename == "":
                 name = media.file_name
-            else:
-                name = filename
+                if AUTO_RE_REM :
+                 for i in AUTO_RE_REM.split(','):
+                    if i in name:
+                        name=name.replace(i,'')
+                if AUTO_RE_ADD :        
+                 name =name.replace('.'+name.split('.')[-1],'')+AUTO_RE_ADD+'.'+name.split('.')[-1]
                 path = path + name
+            else:
+                name = filename          
+                if AUTO_RE_REM :
+                 for i in AUTO_RE_REM.split(','):
+                    if i in name:
+                        name=name.replace(i,'')
+                if AUTO_RE_ADD :        
+                 name =name.replace('.'+name.split('.')[-1],'')+AUTO_RE_ADD+'.'+ name.split('.')[-1]
+                path = path + name      
 
             if download:
                 if STOP_DUPLICATE and not self.__listener.isLeech:
